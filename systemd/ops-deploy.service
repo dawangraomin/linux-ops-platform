@@ -1,0 +1,14 @@
+[Unit]
+Description=Ops Platform Deploy Service
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/home/ops
+ExecStart=/bin/bash /home/ops/scripts/deploy.sh
+ExecStop=/usr/bin/docker compose -f /home/ops/docker-compose.yml down
+
+[Install]
+WantedBy=multi-user.target

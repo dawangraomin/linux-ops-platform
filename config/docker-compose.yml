@@ -1,0 +1,38 @@
+services:
+  nginx:
+    image: nginx:1.25
+    container_name: ops-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - /home/ops/web:/usr/share/nginx/html:Z
+      - /home/ops/nginx.conf:/etc/nginx/nginx.conf:Z
+    networks:
+      - ops-net
+    restart: always
+
+  mysql:
+    image: mysql:8.0
+    container_name: ops-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root123456
+      MYSQL_DATABASE: appdb
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - ops-net
+    restart: always
+
+  redis:
+    image: redis:7
+    container_name: ops-redis
+    networks:
+      - ops-net
+    restart: always
+
+networks:
+  ops-net:
+    driver: bridge
+
+volumes:
+  mysql-data:

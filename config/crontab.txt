@@ -1,0 +1,8 @@
+# 每天凌晨 2 点备份
+0 2 * * * /home/ops/scripts/backup.sh >> /home/ops/logs/cron_backup.log 2>&1
+
+# 每天早上 8 点巡检
+0 8 * * * /home/ops/scripts/check.sh > /home/ops/logs/check_$(date +\%Y\%m\%d).log 2>&1
+
+# 每小时检查磁盘
+0 * * * * df -h / | awk 'NR==2{print $5}' | grep -qE '^(8[0-9]|9[0-9]|100)%' && echo "[$(date)] 磁盘告警" >> /home/ops/logs/alert.log
